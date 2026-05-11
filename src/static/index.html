@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXIF GPS 编辑器</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- 左侧面板：文件列表与工作区 -->
+        <div class="left-panel">
+            <h1>EXIF GPS 编辑器</h1>
+
+            <!-- 工作区设置 -->
+            <div class="workspace-panel">
+                <div class="workspace-row">
+                    <label>源文件夹</label>
+                    <div class="workspace-input-group">
+                        <input type="text" id="sourceInput" placeholder="如: D:\Photos" title="可粘贴绝对路径，或点击右侧按钮选择">
+                        <button id="pickSourceBtn" type="button" class="icon-btn" title="选择文件夹">📁</button>
+                    </div>
+                </div>
+                <div class="workspace-row">
+                    <label>输出文件夹</label>
+                    <div class="workspace-input-group">
+                        <input type="text" id="outputInput" placeholder="默认: 下载目录">
+                        <button id="pickOutputBtn" type="button" class="icon-btn" title="选择文件夹">📁</button>
+                    </div>
+                </div>
+                <div class="workspace-actions">
+                    <button id="scanBtn" type="button" class="primary">扫描文件</button>
+                    <button id="genThumbBtn" type="button" class="secondary">生成缩略图</button>
+                </div>
+            </div>
+
+            <div class="file-list-header">
+                <label class="select-all-label">
+                    <input type="checkbox" id="selectAllCheckbox">
+                    全选
+                </label>
+                <button id="rangeSelectBtn" type="button" class="text-btn" disabled>选中范围</button>
+                <span id="fileCountLabel" class="file-count">0 个文件</span>
+            </div>
+
+            <div class="file-list-container">
+                <table class="file-table" id="fileTable">
+                    <thead>
+                        <tr>
+                            <th style="width:32px"></th>
+                            <th style="width:50px"></th>
+                            <th>文件名</th>
+                            <th style="width:80px">大小</th>
+                            <th style="width:40px">状态</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fileTableBody">
+                    </tbody>
+                </table>
+                <div id="emptyHint" class="empty-hint">尚未设置源文件夹，请在上方输入路径并点击扫描</div>
+            </div>
+        </div>
+
+        <!-- 右侧面板：GPS 设置、任务队列、操作 -->
+        <div class="right-panel">
+            <h2>GPS 坐标设置</h2>
+
+            <div class="coord-mode">
+                <label>
+                    <input type="checkbox" id="coordModeCheckbox">
+                    使用国内地图兼容坐标（GCJ-02）
+                </label>
+                <p class="hint">不勾选则写入标准 WGS-84 坐标，兼容 Google/Apple</p>
+            </div>
+
+            <div class="map-section">
+                <button id="toggleMapBtn" type="button" class="secondary">在地图上选点</button>
+                <div id="mapContainer" class="map-container hidden">
+                    <div id="map"></div>
+                    <p class="hint">点击地图即可自动填充坐标</p>
+                    <p id="mapError" class="hint error" style="display:none; color:#dc2626;"></p>
+                </div>
+            </div>
+
+            <div class="coord-inputs">
+                <label>
+                    纬度 (lat)
+                    <input type="number" id="latInput" step="any" placeholder="如: 39.9042">
+                </label>
+                <label>
+                    经度 (lng)
+                    <input type="number" id="lngInput" step="any" placeholder="如: 116.4074">
+                </label>
+                <label>
+                    海拔 (m，可选)
+                    <input type="number" id="altInput" step="any" placeholder="如: 35">
+                </label>
+            </div>
+
+            <div class="task-section">
+                <h3>任务队列 <span id="taskQueueCount" class="badge">0</span></h3>
+                <div id="taskQueue" class="task-list">
+                    <div class="task-empty">暂无任务</div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="addTaskBtn" type="button" class="secondary">
+                    添加到任务 <span id="addTaskBadge" class="badge">0</span>
+                </button>
+                <button id="startBtn" type="button" class="primary" disabled>开始处理</button>
+                <button id="openOutputBtn" type="button" class="secondary" style="display:none;">打开输出目录</button>
+            </div>
+
+            <div id="status" class="status"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>
