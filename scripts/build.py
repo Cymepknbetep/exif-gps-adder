@@ -27,6 +27,7 @@ LIBRARY_BIN = CONDA_ENV / "Library" / "bin" if (CONDA_ENV / "Library" / "bin").e
 cmd = [
     sys.executable, "-m", "PyInstaller",
     "--onedir",
+    "--distpath", str(PROJECT_ROOT / "outputs"),
     "--name", "EXIF_GPS_Adder",
     "--add-data", f"src/static{os.pathsep}src/static",
     "--add-data", f"tools{os.pathsep}tools",
