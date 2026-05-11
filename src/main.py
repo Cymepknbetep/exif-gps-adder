@@ -36,7 +36,7 @@ _workspace = {
     "output": str(Path.home() / "Downloads"),
 }
 
-THUMBS_DIR = _PROJECT_ROOT / "outputs" / "thumbs"
+THUMBS_DIR = config.WRITABLE_DIR / "outputs" / "thumbs"
 THUMBS_DIR.mkdir(parents=True, exist_ok=True)
 
 _IMAGE_EXTS = {
@@ -361,4 +361,4 @@ async def api_gps_write_local_batch(
 # ============ 启动 ============
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host=config.HOST, port=config.PORT, reload=False, log_level=config.LOG_LEVEL)
+    uvicorn.run(app, host=config.HOST, port=config.PORT, reload=False, log_level=config.LOG_LEVEL)

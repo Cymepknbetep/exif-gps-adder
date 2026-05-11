@@ -4,10 +4,17 @@
 """
 
 import os
+import sys
 from pathlib import Path
 
-# 项目根目录（本文件位于 src/ 下，向上退一级即为根目录）
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+# 项目根目录：开发模式按文件位置推导，打包模式使用 PyInstaller 临时目录
+if getattr(sys, 'frozen', False):
+    PROJECT_ROOT = Path(sys._MEIPASS)
+    WRITABLE_DIR = Path.home() / ".exif_gps_adder"
+    WRITABLE_DIR.mkdir(parents=True, exist_ok=True)
+else:
+    PROJECT_ROOT = Path(__file__).resolve().parent.parent
+    WRITABLE_DIR = PROJECT_ROOT
 
 # 服务器监听配置
 HOST: str = os.getenv("EXIF_GPS_HOST", "127.0.0.1")
